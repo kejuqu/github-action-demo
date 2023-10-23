@@ -5,8 +5,9 @@ jobs:
   check-bats-version:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4 # actions/checkout@v4 用于 将仓库的代码克隆到 GitHub Actions 的工作环境中，以供后续使用
+      - uses: actions/setup-node@v3 # actions/setup-node@v3 操作会根据指定的 Node.js 版本，设置工作环境中的 node 运行时和相关的工具
+        # with 关键字用于为一个 操作（action）或者 step 提供参数配置，一般跟随在 uses 或者 run 关键字的后边
         with:
           node-version: "14"
       - run: npm install -g bats

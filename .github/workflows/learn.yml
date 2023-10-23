@@ -1,0 +1,79 @@
+name: learn-github-actions
+run-name: ${{ github.actor }} is learning Github actions
+on: [push]
+
+env:
+  continue: true
+  time: 3
+  myNull: ${{null}}
+  myBoolean: ${{false}}
+  myIntegerNumber: ${{ 720 }}
+  myFloatNumber: ${{-9.2}}
+  myHexNumer: ${{0xff}}
+  myExponentialNumber: ${{ -2.99e-2}}
+  myString: Mona the Octocat
+  myStringInBraces: ${{ 'It''s open source!'}}
+  MY_ENV_VAR: ${{ github.ref == 'refs/heads/main' && 'value_for_main_branch' || 'value_for_other_branches'}}
+
+jobs:
+  check-bats-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4 # actions/checkout@v4 用于 将仓库的代码克隆到 GitHub Actions 的工作环境中，以供后续使用
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "14"
+      - run: npm install -g bats
+      - run: bats -v
+  job1:
+    runs-on: ubuntu-latest
+    # outputs 定义了 job1 的输出，outpus 定义了一个名为 matrix 的输出
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix}}
+    steps:
+      # 给当前的步骤定义了一个唯一的 id 标识符
+      - id: set-matrix
+        # 将 echo 的值 matrix 写入到 $GITHUB_OUTPUT 文件中
+        run: echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
+  job2:
+    # 指定当前的 job2 依赖于 job1 的完成
+    needs: job1
+    runs-on: ubuntu-latest
+    # strategy 定义当前 job 的 策略，
+    strategy:
+      matrix: ${{ fromJSON(needs.job1.outputs.matrix)}}
+    steps:
+      - run: build
+  job3:
+    runs-on: ubuntu-latest
+    steps:
+      # continue-on-error 用于指定步骤发生错误后的行为， 如果 fromJSON(env.continue) 结果为 true 则发生错误时可继续执行后续的步骤，为 false 即在步骤发生错误时停止执行后续步骤
+      - continue-on-error: ${{ fromJSON(env.continue) }}
+        # 用于指定步骤的最大执行时间，以分钟为单位的最大执行时间，如果 step 在指定的时间内未完成，将被终止
+        timeout-minutes: ${{ fromJSON(env.time) }}
+        run: echo "test"
+  dump_contexts_to_log:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GIthub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+
+        run: echo "$GITHUB_CONTEXT"
+      - name: Dump job context
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps) }}
+        run: echo "$STEPS_CONTEXT"
+
+      - name: dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps) }}
+        run: echo "$STEPS_CONTEXT"
+      - name: Dump strategy context
+        env:
+          STRATEGY_CONTEXT: ${{ toJson(strategy) }}
+        run: echo "$STRATEGY_CONTEXT"
+      - name: Dump matrix context
+        env:
+          MATRIX_CONTEXT: ${{ toJson(matrix) }}
+        run: echo "$MATRIX_CONTEXT"
