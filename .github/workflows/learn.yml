@@ -1,5 +1,5 @@
-name: learn-github-actions
-run-name: ${{ github.actor }} is learning Github actions
+name: workflow-name
+run-name: workflow-run-name
 on: [push]
 
 env:
@@ -41,16 +41,16 @@ jobs:
     runs-on: ubuntu-latest
     # strategy 定义当前 job 的 策略，
     strategy:
-      matrix: ${{ fromJSON(needs.job1.outputs.matrix)}}
+      matrix: ${{ fromJson(needs.job1.outputs.matrix)}}
     steps:
       - run: build
   job3:
     runs-on: ubuntu-latest
     steps:
-      # continue-on-error 用于指定步骤发生错误后的行为， 如果 fromJSON(env.continue) 结果为 true 则发生错误时可继续执行后续的步骤，为 false 即在步骤发生错误时停止执行后续步骤
-      - continue-on-error: ${{ fromJSON(env.continue) }}
+      # continue-on-error 用于指定步骤发生错误后的行为， 如果 fromJson(env.continue) 结果为 true 则发生错误时可继续执行后续的步骤，为 false 即在步骤发生错误时停止执行后续步骤
+      - continue-on-error: ${{ fromJson(env.continue) }}
         # 用于指定步骤的最大执行时间，以分钟为单位的最大执行时间，如果 step 在指定的时间内未完成，将被终止
-        timeout-minutes: ${{ fromJSON(env.time) }}
+        timeout-minutes: ${{ fromJson(env.time) }}
         run: echo "test"
   dump_contexts_to_log:
     runs-on: ubuntu-latest
