@@ -7,6 +7,10 @@ jobs:
     # 查看 runners 与下载的软件包 link： https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners/about-github-hosted-runners#preinstalled-software
     runs-on: ubuntu-latest
     steps:
+      - name: pre - checkout
+        run: |
+          pwd
+          ls -lh
       #   - name: clone repository
       #     # | 表示多行脚本需要运行
       #     run: |
@@ -15,6 +19,11 @@ jobs:
       # the step of clone repository can be replaced by the below step, which use actions/checkout@v4 action
       - name: clone repository
         uses: actions/checkout@v4
+
+      - name: after checkout
+        run: |
+          pwd
+          ls -lh
 
       - name: install pytest
         # pip3 是 unbutu-latest preinstall 了的 package management.
