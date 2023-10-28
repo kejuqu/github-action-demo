@@ -1,0 +1,20 @@
+name: Python test workflow
+# workflow_dispatch 表示手动触发
+on: workflow_dispatch
+
+jobs:
+  pytest:
+    # 查看 runners 与下载的软件包 link： https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners/about-github-hosted-runners#preinstalled-software
+    runs-on: ubuntu-latest
+    steps:
+      - name: clone repository
+        # | 表示多行脚本需要运行
+        run: |
+          git clone https://github.com/kejuqu/github-action-demo
+          cd github-action-demo
+      - name: install pytest
+        # pip3 是 unbutu-latest preinstall 了的 package management.
+        run: pip3 install pytest
+      - name: run pytest
+        # 运行 pytest 进行 python test 测试
+        run: pytest
