@@ -1,0 +1,21 @@
+name: Matrix context example
+on: push
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      # 定义一个 matrix，可以同时运行不同的作业实力，每个实例使用不同的变量值
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [14, 16]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        # with 指定 当前 aciton 的参数
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Installl dependencies
+        run: npm ci
+      - name: Run test
+        run: npm test

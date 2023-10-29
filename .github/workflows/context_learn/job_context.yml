@@ -1,0 +1,26 @@
+name: PostgreSQL Service Example
+on: push
+
+jobs:
+  # define a job, named postgres-job
+  postgres-job:
+    runs-on: ubuntu-latest
+    # define a service, which can run in job.
+    services:
+      # service name is postgres
+      postgres:
+        # specific postgres image
+        image: postgres
+        # set environment for service.
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        # map ports
+        ports:
+          # Maps TCP port 5432 in the service container to a randomly chosen available port on the host.
+          - 5432
+
+    steps:
+      - uses: actions/checkout@v4
+      - run: pg_isready -h localhost -p ${{ job.services.postgres.ports[5432] }}
+      - run: echo "./run-tests ..."

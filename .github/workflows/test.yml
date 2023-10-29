@@ -1,0 +1,18 @@
+name: Run CI
+on: [push, pull_request]
+
+jobs:
+  normal_ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run normal ci
+        run: echo "run tests"
+  pull_request_ci:
+    runs-on: ubuntu-latest
+    # if the workflow run was triggered by the pull_request event, can run the current job
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run PR CI
+        run: echo "pull request test"

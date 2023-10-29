@@ -1,0 +1,19 @@
+name: Defining environment variables for a single workflow
+on: workflow_dispatch
+
+# The entire workflow, by using env at the top level of the workflow file
+env:
+  DAY_OF_WEEK: Monday
+
+# You can access env variable values using runner environment variables or using context.
+jobs:
+  greeting_job:
+    runs-on: ubuntu-latest
+    # The contents of a job within a workflow, define variables by env key
+    env:
+      Gretting: Hello
+    steps:
+      - name: "Say Hello Mona it's Monday"
+        run: echo "$Greeting $First_Name. Today is $DAY_OF_WEEK!"
+        env:
+          First_Name: Mona

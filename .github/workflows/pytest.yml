@@ -31,3 +31,10 @@ jobs:
       - name: run pytest
         # 运行 pytest 进行 python test 测试
         run: pytest
+
+  pro-check:
+    # if current branch is main branch, then the subsequent steps are executed.
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Deploying to production server on branch $GITHUB_REF"

@@ -1,0 +1,16 @@
+name: Generate random failure
+on: push
+jobs:
+  randomly-failing-job:
+    runs-on: ubuntu-latest
+    steps:
+      - id: checkout
+        uses: actions/checkout@v4
+      - name: Generate 0 or 1
+        id: generate_number
+        # 当 key=value >> $GITHUB_OUTPUT 后，可以从当前的 stepId.outpus 中获取到 key 对应的值
+        run: echo "random_number=$(($RANDOM % 2))" >> $GITHUB_OUTPUT
+      - name: Pass or fail
+        # 这里的 outputs.random_number 来自于 GITHUB_OUTPUT 中的值
+        run: |
+          if [[ ${{ steps.generate_number.outputs.random_number }} == 0 ]]; then exit 0; else exit 1; fi

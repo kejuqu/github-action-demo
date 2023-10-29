@@ -1,0 +1,27 @@
+name: Strategy context example.
+# For workflows with a matrix, the strategy context contains information about the matirx execution strategy for the current job
+on: push
+
+# strategy context like this:
+# {
+#   "fail-fast": true,
+#   "job-index": 3, // current jub index, base start number is 0
+#   "job-total": 4,
+#   "max-parallel": 4
+# }
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test-group: [1, 2]
+        node: [14, 16]
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm test > test-job-${{ strategy.job-index }}.txt
+      - name: Upload logs
+        uses: actions/upload-artifact@v3
+        with:
+          name: Build log for job ${{ strategy.job-index }}
+          path: test-job-${{ strategy.job-index }}.txt
