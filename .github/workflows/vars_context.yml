@@ -2,8 +2,8 @@ name: Using the vars context to access configration varialbe values
 on:
   workflow_dispatch:
 env:
-# Setting an environment variable with the value of a configuration variable
-env_var: ${{ vars.ENV_CONTEXT_VAR }}
+  # Setting an environment variable with the value of a configuration variable
+  env_var: ${{ vars.ENV_CONTEXT_VAR }}
 
 jobs:
   display-variables:
