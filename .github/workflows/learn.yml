@@ -1,6 +1,6 @@
 name: workflow-name
 run-name: workflow-run-name
-on: [push]
+on: workflow_dispatch
 
 env:
   continue: true

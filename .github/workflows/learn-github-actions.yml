@@ -1,6 +1,6 @@
 name: learn-github-actions # 可选的，写了之后将会出现在 Actions tab 中国呢，如果没有将会使用 yml 文件名代替
 run-name: ${{ github.actor}} is learning GitHub Actions
-on: [push]
+on: workflow_dispatch
 jobs:
   check-bats-version:
     runs-on: ubuntu-latest
