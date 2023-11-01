@@ -1,0 +1,15 @@
+name: Call a reusable workflow and use its outputs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  job1:
+    name: using reusable_workflow.yml
+    uses: ./.github/workflows/using_outputs_from_a_reusable_workflow.yml
+  job2:
+    runs-on: ubuntu-latest
+    name: Echo the outputs from called workflow
+    needs: job1
+    steps:
+      - run: echo ${{ needs.job1.outputs.firstword }} ${{ needs.job1.outpus.secondword }}
